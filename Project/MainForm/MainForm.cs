@@ -7,13 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LogicLayer;
+using Globals;
 
 namespace MainForm
 {
     public partial class MainForm : Form
     {
-        public MainForm()
+        Logic lo;
+        public MainForm(Logic lo)
         {
+            this.lo = lo;
             InitializeComponent();
         }
     }

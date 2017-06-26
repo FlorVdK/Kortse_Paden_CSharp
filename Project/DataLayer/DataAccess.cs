@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Collections.Specialized;
+using Globals;
 
 namespace DataLayer
 {
