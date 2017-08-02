@@ -16,5 +16,20 @@ namespace LogicLayer
         {
             this.da = da;
         }
+
+        public void InitGame()
+        {
+            da.InitGame();
+        }        
+
+        public void InitTimer()
+        {
+            da.InitTimer();
+        }
+
+        public void InitRenderer()
+        {
+            da.InitRenderer();
+        }
     }
 }

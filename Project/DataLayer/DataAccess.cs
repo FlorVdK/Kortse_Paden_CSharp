@@ -11,6 +11,20 @@ namespace DataLayer
 {
     public class DataAccess
     {
+        public void InitGame()
+        {
+            string configvalue1 = ConfigurationManager.AppSettings["logfilelocation"];
+            Console.WriteLine("Game : Speed = " + configvalue1);
+        }
 
+        public void InitTimer()
+        {
+            Console.WriteLine("Timer");
+        }
+
+        public void InitRenderer()
+        {
+            Console.WriteLine("Render");
+        }
     }
 }

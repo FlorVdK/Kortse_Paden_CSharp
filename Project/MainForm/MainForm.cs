@@ -15,10 +15,34 @@ namespace MainForm
     public partial class MainForm : Form
     {
         Logic lo;
+
         public MainForm(Logic lo)
         {
             this.lo = lo;
             InitializeComponent();
+            InitRenderer();				//aanmaken backbuffer 
+            InitGame();
+            InitTimer();
+        }
+
+        private void InitTimer()
+        {
+            lo.InitTimer();
+        }
+
+        private void InitGame()
+        {
+            lo.InitGame();
+        }
+
+        private void InitRenderer()
+        {
+            lo.InitRenderer();
+        }
+
+        private void Start_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -24,6 +24,7 @@ namespace MainForm
         private void button1_Click(object sender, EventArgs e)
         {
             MainForm main = new MainForm(lo);
+            main.Show();
         }
     }
 }
