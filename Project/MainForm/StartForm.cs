@@ -26,5 +26,6 @@ namespace MainForm
             MainForm main = new MainForm(lo);
             main.Show();
         }
+        
     }
 }

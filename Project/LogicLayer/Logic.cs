@@ -11,6 +11,9 @@ namespace LogicLayer
     public class Logic
     {
         public DataAccess da;
+        public string numberwalls;
+        public string[] coordinates;
+        public Wall[] walls;
 
         public Logic(DataAccess da)
         {
@@ -30,6 +33,7 @@ namespace LogicLayer
         public void InitRenderer()
         {
             da.InitRenderer();
+            walls = da.walls;
         }
     }
 }

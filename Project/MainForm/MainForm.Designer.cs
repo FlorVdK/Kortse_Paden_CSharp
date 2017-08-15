@@ -28,18 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.display = new System.Windows.Forms.PictureBox();
             this.Start = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.display)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // display
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1143, 583);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.display.Location = new System.Drawing.Point(12, 12);
+            this.display.Name = "display";
+            this.display.Size = new System.Drawing.Size(1131, 561);
+            this.display.TabIndex = 0;
+            this.display.TabStop = false;
             // 
             // Start
             // 
@@ -57,17 +57,17 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1318, 585);
             this.Controls.Add(this.Start);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.display);
             this.Name = "MainForm";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.display)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox display;
         private System.Windows.Forms.Button Start;
     }
 }

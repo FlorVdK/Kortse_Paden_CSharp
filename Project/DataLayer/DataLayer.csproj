@@ -45,9 +45,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Globals\Globals.csproj">
       <Project>{42804e4d-df48-4ecd-8b79-628bd3e2797e}</Project>
       <Name>Globals</Name>
