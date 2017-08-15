@@ -14,8 +14,8 @@ namespace Globals
 
         public Vector(double X, double Y)
         {
-            this.X = X;
-            this.Y = Y;
+            this.X = X/Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
+            this.Y = Y / Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
         }
     }
 }

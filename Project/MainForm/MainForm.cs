@@ -14,35 +14,33 @@ namespace MainForm
 {
     public partial class MainForm : Form
     {
+
+
         #region Variables
         Logic lo;
 
         public string numberwalls;
         public string[] coordinates;
         public Wall[] walls;
+        PointPt goalPt;
+
+        Robot robot;
+        bool motor;
 
         Timer timer;
-        int[] Score = new int[2] { 0, 0 };
-        bool team1Bal;
-        bool team2Bal;
-        List<System.Drawing.Point[]> rrtList;
+        List<Node> nodes;
 
         // Globale variabelen voor GDI+
         Graphics screen;
         Bitmap backBuffer;
         float SchaalX;
         float SchaalY;
-
-        //teams aanmaken
-        int numberRobots = 2;
-        Robot robot;
-        int id;
-
+        
         // variabelen voor model
-
-        Int32 time;                  // in msec
+        
         const double straal = 30.0d; //van de bol, in m
         const double balstraal = 15.0d; //van de bol, in m
+        private bool found;
 
         #endregion Variables
 
@@ -50,24 +48,67 @@ namespace MainForm
         {
             this.lo = lo;
             InitializeComponent();
-            InitRenderer();				//aanmaken backbuffer 
-            InitGame();
+            InitRenderer();	
             InitTimer();
+            EngineButton.Enabled = false;
         }
 
         private void InitTimer()
         {
             lo.InitTimer();
+            timer = new Timer();
+            timer.Interval = 10; // msec, f = 100 Hz;
+            timer.Tick += new EventHandler(timer_Tick);
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            DoMovement();
+            display.Invalidate(); // force redraw (& paint event);
         }
 
         private void InitGame()
         {
-            lo.InitGame();
+            lo.InitGame(display.Width, display.Height);
+            found = false;
+            DoRRT();
+            lo.MakeRobot();
+            display.Invalidate(); // force redraw (& paint event);
+            display.Update();
+            timer.Enabled = true;
+            EngineButton.Enabled = true;
+            motor = false;
+        }
+
+        private void DoMovement()
+        {
+            lo.DoMovement(motor);
+        }
+
+        private void DoRRT()
+        {
+
+            while (!found)
+            {
+                Node n = lo.FindNextNode();
+                if(lo.found)
+                {
+                    found = true;
+                    Console.WriteLine("found");
+                }
+                display.Invalidate(); // force redraw (& paint event);
+                display.Update();
+            }
+            lo.DrawPath();
+            nodes = lo.nodes;
+            display.Invalidate(); // force redraw (& paint event);
+            display.Update();
         }
 
         private void InitRenderer()
         {
             lo.InitRenderer();
+            nodes = lo.nodes;
             numberwalls = lo.numberwalls;
             coordinates = lo.coordinates;
             backBuffer = new Bitmap(display.Width, display.Height);
@@ -96,7 +137,7 @@ namespace MainForm
 
             // toon backbuffer op display
             output.DrawImage(backBuffer, new Rectangle(0, 0, display.Width, display.Height), new Rectangle(0, 0, display.Width, display.Height), GraphicsUnit.Pixel);
-            Console.WriteLine(display.Width + " " + display.Height);
+            
             // display textboxes
             //tijdBox.Text = String.Format("{0:F}", time / 1000.0d);
             //label3.Text = "team blauw :" + Score[1];
@@ -105,18 +146,44 @@ namespace MainForm
 
         private void DrawField()
         {
-            screen.Clear(Color.Blue);
+            screen.Clear(Color.White);
             walls = lo.walls;
             foreach (var wall in walls)
             {
                 Rectangle rect = new Rectangle(wall.X, wall.Y, wall.width, wall.heigth);
                 screen.FillRectangle(new SolidBrush(Color.Red), rect);
-            }            
+                screen.DrawRectangle(new Pen(Color.Black), rect);
+            }
+            goalPt = lo.goalPt;
+            Rectangle goalRect = new Rectangle(goalPt.X, goalPt.Y, 35, 35);
+            screen.FillEllipse(new SolidBrush(Color.Yellow), goalRect);
+            screen.DrawEllipse(new Pen(Color.Black), goalRect);
+            foreach (var n in nodes)
+            {
+                screen.FillEllipse(new SolidBrush(Color.Black), n.X, n.Y, 5, 5);
+                if(nodes.Count > 1)
+                {
+                    n.DrawLine(screen, Color.Black);
+                }
+            }
+            robot = lo.robot;
+            if (robot != null)
+            {
+                Rectangle robotRect = new Rectangle((int)(robot.x - robot.straal / 2), (int)(robot.y - robot.straal / 2), (int)robot.straal, (int)robot.straal);
+                screen.FillEllipse(new SolidBrush(Color.Blue), robotRect);
+            }           
+
         }
 
         private void Start_Click(object sender, EventArgs e)
         {
+            //aanmaken backbuffer 
+            InitGame();
+        }
 
+        private void EngineButton_Click(object sender, EventArgs e)
+        {
+            motor = !motor;
         }
     }
 }

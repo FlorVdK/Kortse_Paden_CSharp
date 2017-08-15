@@ -15,11 +15,14 @@ namespace DataLayer
         public string numberwalls;
         public string[] coordinates;
         public Wall[] walls;
+        public string[] startstring;
+        public string[] goalstring;
+        public PointPt start;
+        public PointPt goal;
 
         public void InitGame()
         {
             string configvalue1 = ConfigurationManager.AppSettings["logfilelocation"];
-            Console.WriteLine("Game : Speed = " + configvalue1);
         }
 
         public void InitTimer()
@@ -29,7 +32,6 @@ namespace DataLayer
 
         public void InitRenderer()
         {
-            Console.WriteLine("Render");
             numberwalls = ConfigurationManager.AppSettings["numberwalls"];
             coordinates = ConfigurationManager.AppSettings["coordinates"].Split(',');
             walls = new Wall[int.Parse(numberwalls)];
@@ -37,6 +39,10 @@ namespace DataLayer
             {
                 walls[i] = new Wall(int.Parse(coordinates[4 * i]), int.Parse(coordinates[4 * i + 1]), Math.Abs( int.Parse(coordinates[4 * i + 2]) - int.Parse(coordinates[4 * i])), Math.Abs( int.Parse(coordinates[4 * i + 3]) - int.Parse(coordinates[4 * i + 1])));
             }
+            startstring = ConfigurationManager.AppSettings["start"].Split(',');
+            goalstring = ConfigurationManager.AppSettings["goal"].Split(',');
+            start = new PointPt(int.Parse(startstring[0]), int.Parse(startstring[1]));
+            goal = new PointPt(int.Parse(goalstring[0]), int.Parse(goalstring[1]));
         }
     }
 }
