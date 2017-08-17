@@ -16,7 +16,8 @@ namespace Globals
         public double maxspeed { get; set; }
         public double acceleration { get; set; }
         public Vector direction { get; set; }
-        public bool hasBall { get; set; }
+        public int weigth { get; set; }
+        public int motorforce { get; set; }
 
         public Robot()
         {
@@ -28,6 +29,7 @@ namespace Globals
             this.x = x;
             this.y = y;
             this.straal = straal;
+            direction = new Vector(0, 0);
             speed = 0;
             maxspeed = 4;
             acceleration = 0.1;
@@ -42,6 +44,19 @@ namespace Globals
             speed = 0;
             maxspeed = 4;
             acceleration = 0.1;
+        }
+
+        public Robot(int x, int y, double straal, Vector direction, int motorforce, int weigth, double maxspeed)
+        {
+            this.x = x;
+            this.y = y;
+            this.straal = straal;
+            this.direction = direction;
+            speed = 0;
+            this.maxspeed = maxspeed;
+            acceleration = 0;
+            this.motorforce = motorforce;
+            this.weigth = weigth;
         }
     }
 }

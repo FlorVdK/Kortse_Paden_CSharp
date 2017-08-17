@@ -19,10 +19,17 @@ namespace DataLayer
         public string[] goalstring;
         public PointPt start;
         public PointPt goal;
+        public int motorforce;
+        public int friction;
+        public int robotweigth;
+        public double robotmaxspeed;
 
         public void InitGame()
         {
-            string configvalue1 = ConfigurationManager.AppSettings["logfilelocation"];
+            motorforce = int.Parse(ConfigurationManager.AppSettings["motorforce"]);
+            friction = int.Parse(ConfigurationManager.AppSettings["friction"]);
+            robotweigth = int.Parse(ConfigurationManager.AppSettings["robotweigth"]);
+            robotmaxspeed = double.Parse( ConfigurationManager.AppSettings["robotmaxspeed"]);
         }
 
         public void InitTimer()
