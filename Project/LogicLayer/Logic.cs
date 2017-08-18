@@ -125,19 +125,27 @@ namespace LogicLayer
         {
             foreach (var wall in walls)
             {
-                if (LineToPointDistance2D(new PointPt(wall.X, wall.Y), new PointPt(wall.X+wall.width, wall.Y), new PointPt(robot.x, robot.y) ) <= robot.straal ||
-                    LineToPointDistance2D(new PointPt(wall.X, wall.Y), new PointPt(wall.X , wall.Y + wall.heigth), new PointPt(robot.x, robot.y)) <= robot.straal ||
-                    LineToPointDistance2D(new PointPt(wall.X + wall.width, wall.Y), new PointPt(wall.X + wall.width, wall.Y + wall.heigth), new PointPt(robot.x, robot.y)) <= robot.straal ||
-                    LineToPointDistance2D(new PointPt(wall.X, wall.Y + wall.heigth), new PointPt(wall.X + wall.width, wall.Y + wall.heigth), new PointPt(robot.x, robot.y)) <= robot.straal )
+                if (LineToPointDistance2D(new PointPt(wall.X, wall.Y), new PointPt(wall.X+wall.width, wall.Y), new PointPt(robot.x, robot.y) ,true) <= robot.straal ||
+                    LineToPointDistance2D(new PointPt(wall.X, wall.Y), new PointPt(wall.X , wall.Y + wall.heigth), new PointPt(robot.x, robot.y), true) <= robot.straal ||
+                    LineToPointDistance2D(new PointPt(wall.X + wall.width, wall.Y), new PointPt(wall.X + wall.width, wall.Y + wall.heigth), new PointPt(robot.x, robot.y), true) <= robot.straal ||
+                    LineToPointDistance2D(new PointPt(wall.X, wall.Y + wall.heigth), new PointPt(wall.X + wall.width, wall.Y + wall.heigth), new PointPt(robot.x, robot.y), true) <= robot.straal )
                 {
                     DoCollision(robot, wall);
                 }
             }
         }
+        private void DoCollision(Robot robot1, Wall wall)
+        {
+            robot1.direction = new Vector(robot1.direction.X, -robot1.direction.Y);
+        }
 
+
+
+        #region distance point->line
+        //https://stackoverflow.com/questions/4438244/how-to-calculate-shortest-2d-distance-between-a-point-and-a-line-segment-in-all
         private double DotProduct(PointPt pointA, PointPt pointB, PointPt pointC)
         {
-            PointPt AB = new PointPt(pointB.X - pointA.X, pointB.Y- pointA.Y);
+            PointPt AB = new PointPt(pointB.X - pointA.X, pointB.Y - pointA.Y);
             PointPt BC = new PointPt(pointC.X - pointB.X, pointC.Y - pointB.Y);
             double dot = AB.X * BC.X + AB.Y * BC.Y;
             return dot;
@@ -159,16 +167,21 @@ namespace LogicLayer
             return Math.Sqrt(d1 * d1 + d2 * d2);
         }
 
-        private double LineToPointDistance2D(PointPt pointA, PointPt pointB, PointPt pointC)
+        private double LineToPointDistance2D(PointPt pointA, PointPt pointB, PointPt pointC, bool isSegment)
         {
             double dist = CrossProduct(pointA, pointB, pointC) / Distance(pointA, pointB);
+            if (isSegment)
+            {
+                double dot1 = DotProduct(pointA, pointB, pointC);
+                if (dot1 > 0) return Distance(pointB, pointC);
+                double dot2 = DotProduct(pointB, pointA, pointC);
+                if (dot2 > 0) return Distance(pointA, pointC);
+            }
             return Math.Abs(dist);
-        }
+        } 
+        #endregion
 
-        private void DoCollision(Robot robot1, Wall wall)
-        {
-            robot1.direction = new Vector(robot1.direction.X, -robot1.direction.Y);
-        }
+        
 
         public void DrawPath()
         {
