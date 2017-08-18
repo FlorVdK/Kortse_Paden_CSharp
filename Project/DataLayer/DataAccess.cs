@@ -19,16 +19,16 @@ namespace DataLayer
         public string[] goalstring;
         public PointPt start;
         public PointPt goal;
-        public int motorforce;
-        public int friction;
-        public int robotweigth;
+        public double motorforce;
+        public double friction;
+        public double robotweigth;
         public double robotmaxspeed;
 
         public void InitGame()
         {
-            motorforce = int.Parse(ConfigurationManager.AppSettings["motorforce"]);
-            friction = int.Parse(ConfigurationManager.AppSettings["friction"]);
-            robotweigth = int.Parse(ConfigurationManager.AppSettings["robotweigth"]);
+            motorforce = double.Parse(ConfigurationManager.AppSettings["motorforce"]);
+            friction = double.Parse(ConfigurationManager.AppSettings["friction"]);
+            robotweigth = double.Parse(ConfigurationManager.AppSettings["robotweigth"]);
             robotmaxspeed = double.Parse( ConfigurationManager.AppSettings["robotmaxspeed"]);
         }
 
@@ -44,7 +44,7 @@ namespace DataLayer
             walls = new Wall[int.Parse(numberwalls)];
             for (int i = 0; i < int.Parse(numberwalls); i++)
             {
-                walls[i] = new Wall(int.Parse(coordinates[4 * i]), int.Parse(coordinates[4 * i + 1]), Math.Abs( int.Parse(coordinates[4 * i + 2]) - int.Parse(coordinates[4 * i])), Math.Abs( int.Parse(coordinates[4 * i + 3]) - int.Parse(coordinates[4 * i + 1])));
+                walls[i] = new Wall(int.Parse(coordinates[4 * i]), int.Parse(coordinates[4 * i + 1]), Math.Abs( int.Parse(coordinates[4 * i + 2]) - int.Parse(coordinates[4 * i])), Math.Abs(int.Parse(coordinates[4 * i + 1]) - int.Parse(coordinates[4 * i + 3]) ));
             }
             startstring = ConfigurationManager.AppSettings["start"].Split(',');
             goalstring = ConfigurationManager.AppSettings["goal"].Split(',');

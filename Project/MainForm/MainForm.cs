@@ -191,6 +191,14 @@ namespace MainForm
         private void EngineButton_Click(object sender, EventArgs e)
         {
             motor = !motor;
+            if (motor)
+            {
+                EngineButton.Text = "start engine";
+            }
+            else
+            {
+                EngineButton.Text = "stop engine";
+            }
         }
     }
 }

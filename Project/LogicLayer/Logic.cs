@@ -25,10 +25,11 @@ namespace LogicLayer
         int mapheigth;
         int mapwidth;
         public Robot robot;
-        public int motorforce;
-        public int friction;
-        public int robotweigth;
+        public double motorforce;
+        public double friction;
+        public double robotweigth;
         public double robotmaxspeed;
+        public double force;
 
         public bool found { get; private set; }
 
@@ -81,56 +82,93 @@ namespace LogicLayer
 
         public void DoMovement(bool motor)
         {
-            if(robot.x == nodes.First().X && robot.y == nodes.First().Y)
+            CheckCollision();
+            if (Math.Sqrt(Math.Pow((robot.x - nodes.First().X), 2) + Math.Pow((robot.y - nodes.First().Y), 2)) < robot.straal)
             {
-                nodes.Remove(nodes.First());
+                nodes.Remove(nodes.Last());
             }
-            Node next = nodes.First();
-            if (robot.direction != new Vector(robot.x - next.X, robot.y - next.Y))
+            Node next = nodes.Last();
+            if (robot.direction != new Vector(next.X - robot.x , next.Y -robot.y ))
             {
-                Console.WriteLine("not right direction");
+                robot.direction = new Vector(next.X - robot.x, next.Y - robot.y);
+            }
+            AdjustSpeed(motor);
+            robot.x += (int) Math.Round(robot.speed * robot.direction.X);
+            robot.y += (int)Math.Round(robot.speed * robot.direction.Y);
+        }
+
+        private void AdjustSpeed(bool motor)
+        {
+            force = (motor) ? (robot.motorforce - friction)/robot.weigth : -friction / robot.weigth;
+            if (robot.speed > 0)
+            {
+                robot.speed += force;
+            }
+            else if (robot.speed == 0)
+            {
+                if (force > 0)
+                {
+                    robot.speed += force;
+                }
+            }
+            if (robot.speed > robot.maxspeed)
+            {
+                robot.speed = robot.maxspeed;
+            }
+            if (robot.speed < 0)
+            {
+                robot.speed = 0;
             }
         }
 
-        /**private void CheckCollision()
+        private void CheckCollision()
         {
             foreach (var wall in walls)
             {
-                if (Math.Sqrt(Math.Pow((robot.x - wall.X), 2) + Math.Pow((robot.y - wall.Y), 2)) < robot.straal)
+                if (LineToPointDistance2D(new PointPt(wall.X, wall.Y), new PointPt(wall.X+wall.width, wall.Y), new PointPt(robot.x, robot.y) ) <= robot.straal ||
+                    LineToPointDistance2D(new PointPt(wall.X, wall.Y), new PointPt(wall.X , wall.Y + wall.heigth), new PointPt(robot.x, robot.y)) <= robot.straal ||
+                    LineToPointDistance2D(new PointPt(wall.X + wall.width, wall.Y), new PointPt(wall.X + wall.width, wall.Y + wall.heigth), new PointPt(robot.x, robot.y)) <= robot.straal ||
+                    LineToPointDistance2D(new PointPt(wall.X, wall.Y + wall.heigth), new PointPt(wall.X + wall.width, wall.Y + wall.heigth), new PointPt(robot.x, robot.y)) <= robot.straal )
                 {
-                    DoCollision(robot1, robot2);
+                    DoCollision(robot, wall);
                 }
             }
         }
 
-        private void DoCollision(Robot robot1, Robot robot2)
+        private double DotProduct(PointPt pointA, PointPt pointB, PointPt pointC)
         {
-            Console.WriteLine("col");
-            double temp = robot1.speed;
-            robot1.speed = -robot2.speed;
-            robot2.speed = -temp;
-            if (robot1.hasBall || robot2.hasBall)
-            {
-                Random rd = new Random();
-                if (rd.Next(5) > 3)
-                {
-                    if (robot1.hasBall)
-                    {
-                        robot1.hasBall = false;
-                        robot2.hasBall = true;
-                        team1Bal = false;
-                        team2Bal = true;
-                    }
-                    else
-                    {
-                        robot1.hasBall = true;
-                        robot2.hasBall = false;
-                        team1Bal = true;
-                        team2Bal = false;
-                    }
-                }
-            }
-        }**/
+            PointPt AB = new PointPt(pointB.X - pointA.X, pointB.Y- pointA.Y);
+            PointPt BC = new PointPt(pointC.X - pointB.X, pointC.Y - pointB.Y);
+            double dot = AB.X * BC.X + AB.Y * BC.Y;
+            return dot;
+        }
+
+        private double CrossProduct(PointPt pointA, PointPt pointB, PointPt pointC)
+        {
+            PointPt AB = new PointPt(pointB.X - pointA.X, pointB.Y - pointA.Y);
+            PointPt AC = new PointPt(pointC.X - pointA.X, pointC.Y - pointA.Y);
+            double cross = AB.X * AC.Y - AB.Y * AC.X;
+            return cross;
+        }
+
+        private double Distance(PointPt pointA, PointPt pointB)
+        {
+            double d1 = pointA.X - pointB.X;
+            double d2 = pointA.Y - pointB.Y;
+
+            return Math.Sqrt(d1 * d1 + d2 * d2);
+        }
+
+        private double LineToPointDistance2D(PointPt pointA, PointPt pointB, PointPt pointC)
+        {
+            double dist = CrossProduct(pointA, pointB, pointC) / Distance(pointA, pointB);
+            return Math.Abs(dist);
+        }
+
+        private void DoCollision(Robot robot1, Wall wall)
+        {
+            robot1.direction = new Vector(robot1.direction.X, -robot1.direction.Y);
+        }
 
         public void DrawPath()
         {

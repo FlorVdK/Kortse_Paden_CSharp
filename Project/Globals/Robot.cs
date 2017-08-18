@@ -16,8 +16,8 @@ namespace Globals
         public double maxspeed { get; set; }
         public double acceleration { get; set; }
         public Vector direction { get; set; }
-        public int weigth { get; set; }
-        public int motorforce { get; set; }
+        public double weigth { get; set; }
+        public double motorforce { get; set; }
 
         public Robot()
         {
@@ -46,7 +46,7 @@ namespace Globals
             acceleration = 0.1;
         }
 
-        public Robot(int x, int y, double straal, Vector direction, int motorforce, int weigth, double maxspeed)
+        public Robot(int x, int y, double straal, Vector direction, double motorforce, double weigth, double maxspeed)
         {
             this.x = x;
             this.y = y;
